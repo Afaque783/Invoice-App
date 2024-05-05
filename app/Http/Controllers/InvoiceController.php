@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Counter;
+use App\Models\InvoiceItem;
 use Illuminate\Http\Request;
 
 use App\Models\Invoice;
@@ -68,5 +69,35 @@ class InvoiceController extends Controller
         return response()->json($formData);
     }
 
+
+    public function add_invoice(Request $request) {
+
+
+        $invoiceitem = $request->input("invoice_item");
+
+        $invoicedata['sub_total'] = 12345;
+        $invoicedata['total'] = $request->input("total");
+        $invoicedata['customer_id'] = $request->input("customer_id");
+        $invoicedata['number'] = $request->input("number");
+        $invoicedata['date'] = $request->input("date");
+        $invoicedata['due_date'] = $request->input("due_date");
+        $invoicedata['discount'] = $request->input("discount");
+        $invoicedata['reference'] = $request->input("reference");
+        $invoicedata['terms_and_conditions'] = $request->input("terms_and_conditions");
+        //"SQLSTATE[HY000]: General error: 1364 Field 'sub_total' doesn't have a default value (Connection: mysql, SQL: insert into `invoices` (`total`, `customer_id`, `number`, `date`, `due_date`, `discount`, `reference`, `terms_and_conditions`, `updated_at`, `created_at`) values (5122, 3, INV-20006, 2024-05-05, 2024-05-08, 200, ?, ghfcgfcgjcvccgj, 2024-05-05 17:16:16, 2024-05-05 17:16:16))"
+
+
+        $invoice = Invoice::create($invoicedata);
+
+        foreach(json_decode($invoiceitem) as $item){
+            $itemdata['product_id'] = $item->id;
+            $itemdata['invoice_id'] = $invoice->id;
+            $itemdata['quantity'] = $item->quantity;
+            $itemdata['unit_price'] = $item->unit_price;
+            
+            InvoiceItem::create($itemdata);
+            
+        }
+    }
 
 }
