@@ -100,4 +100,14 @@ class InvoiceController extends Controller
         }
     }
 
+
+
+    public function show_invoice($id){
+        $invoice = Invoice::with(['customer','invoice_items.product'])->find($id);
+
+        return response()->json([
+            'invoice' => $invoice
+        ],200);
+    }
+
 }

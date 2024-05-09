@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invoice extends Model
 {
@@ -23,5 +24,9 @@ class Invoice extends Model
 
     public function customer() {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function invoice_items(){
+        return $this->hasMany(InvoiceItem::class);
     }
 }
